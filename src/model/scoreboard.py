@@ -4,7 +4,7 @@ TEXT_COLOR = "dark red"
 SCORE_COLOR = "dark gray"
 VICTORY_COLOR = "green"
 
-PATH = "data/high_score.txt"
+PATH = "../../data/high_score.txt"
 
 class Scoreboard(Turtle):
     def __init__(self):
