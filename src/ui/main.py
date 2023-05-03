@@ -12,12 +12,17 @@ screen.title("Snake")
 screen.tracer(0)
 
 scoreboard = Scoreboard()
-snake = Snake(scoreboard)
+snake = Snake()
 food = Food()
 
 
 def run_game():
-    while snake.game_continues():
+
+    with open("data/high_score.txt") as file:
+        scoreboard.high_score = int(file.read())
+        scoreboard.update_scoreboard()
+
+    while True:
         screen.update()
         sleep(0.05)
         snake.move()
@@ -28,6 +33,15 @@ def run_game():
             food.refresh()
             snake.add_piece()
 
+        for piece in snake.body[1:]:
+            if snake.head.distance(piece) < 10:
+                scoreboard.reset()
+                snake.reset()
+
+        if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
+            scoreboard.reset()
+            snake.reset()
+
 
 def reset():
     snake.reset()
@@ -35,14 +49,19 @@ def reset():
     run_game()
 
 
+def bye():
+    with open("data/high_score.txt", mode="w") as file:
+        file.write(str(scoreboard.high_score))
+    screen.bye()
+
+
 screen.listen()
 screen.onkey(snake.up, "Up")
 screen.onkey(snake.down, "Down")
 screen.onkey(snake.left, "Left")
 screen.onkey(snake.right, "Right")
-screen.onkey(snake.end_game, "q")
+screen.onkey(bye, "Escape")
 screen.onkey(reset, "space")
 
 run_game()
-scoreboard.game_over()
 screen.exitonclick()

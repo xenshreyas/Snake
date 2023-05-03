@@ -1,4 +1,5 @@
-from turtle import Turtle, Screen
+import _tkinter
+from turtle import Turtle
 
 STARTING_POSITIONS = [(0, 0), (-20, 0), (-40, 0)]
 MOVE_DISTANCE = 15
@@ -12,9 +13,7 @@ SNAKE_COLOR = "spring green"
 
 
 class Snake:
-    def __init__(self, scoreboard):
-        self.scoreboard = scoreboard
-        self.continues = True
+    def __init__(self):
         self.body = []
         self.initialize_snake()
         self.head = self.body[0]
@@ -28,11 +27,10 @@ class Snake:
             self.body.append(piece)
 
     def move(self):
-        self.check_collision()
-        for i in range(len(self.body) - 1, 0, -1):
-            new_x = self.body[i - 1].xcor()
-            new_y = self.body[i - 1].ycor()
-            self.body[i].setposition(new_x, new_y)
+        for piece in range(len(self.body) - 1, 0, -1):
+            new_x = self.body[piece - 1].xcor()
+            new_y = self.body[piece - 1].ycor()
+            self.body[piece].goto(new_x, new_y)
         self.head.forward(MOVE_DISTANCE)
 
     def up(self):
@@ -51,13 +49,6 @@ class Snake:
         if self.head.heading() != WEST:
             self.head.seth(EAST)
 
-    def end_game(self):
-        self.continues = False
-        self.scoreboard.game_over()
-
-    def game_continues(self):
-        return self.continues
-
     def add_piece(self):
         new_x = self.body[len(self.body) - 1].xcor()
         new_y = self.body[len(self.body) - 1].ycor()
@@ -70,18 +61,9 @@ class Snake:
         new_piece.setposition(position)
         self.body.append(new_piece)
 
-    def check_collision(self):
-        for piece in self.body[1:]:
-            if self.head.distance(piece) < 10:
-                self.end_game()
-
-        if self.head.xcor() > 280 or self.head.xcor() < -280 or self.head.ycor() > 280 or self.head.ycor() < -280:
-            self.end_game()
-
     def reset(self):
         for piece in self.body:
-            piece.setposition(1000, 1000)
+            piece.hideturtle()
         self.body.clear()
         self.initialize_snake()
         self.head = self.body[0]
-        self.continues = True
