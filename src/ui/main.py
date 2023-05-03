@@ -17,11 +17,6 @@ food = Food()
 
 
 def run_game():
-
-    with open("data/high_score.txt") as file:
-        scoreboard.high_score = int(file.read())
-        scoreboard.update_scoreboard()
-
     while True:
         screen.update()
         sleep(0.05)
@@ -49,18 +44,12 @@ def reset():
     run_game()
 
 
-def bye():
-    with open("data/high_score.txt", mode="w") as file:
-        file.write(str(scoreboard.high_score))
-    screen.bye()
-
-
 screen.listen()
 screen.onkey(snake.up, "Up")
 screen.onkey(snake.down, "Down")
 screen.onkey(snake.left, "Left")
 screen.onkey(snake.right, "Right")
-screen.onkey(bye, "Escape")
+screen.onkey(screen.bye, "Escape")
 screen.onkey(reset, "space")
 
 run_game()
